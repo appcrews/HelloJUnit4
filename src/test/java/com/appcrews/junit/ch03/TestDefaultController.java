@@ -28,7 +28,16 @@ public class TestDefaultController {
 		}
 		
 	}
-	
+
+	private class SampleExceptionHandler implements RequestHandler {
+
+		@Override
+		public Response process(Request request) throws Exception {
+			throw new Exception("error processing request");
+		}
+		
+	}
+
 	private class SampleResponse implements Response {
 		private static final String NAME = "Test";
 
@@ -73,4 +82,13 @@ public class TestDefaultController {
 		assertEquals( new SampleResponse(), response);
 	}
 
+	@Test 
+	public void testProcessRequestAnswerErrorResponse() {
+		SampleRequest request = new SampleRequest();
+		SampleExceptionHandler handler = new SampleExceptionHandler();
+		controller.addHandler(request, handler);
+		Response response = controller.processRequest(request);
+		assertNotNull("Must not return a null response", response);
+		assertEquals( ErrorResponse.class, response.getClass());
+	}
 }
