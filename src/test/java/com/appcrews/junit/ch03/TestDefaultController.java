@@ -3,6 +3,7 @@ package com.appcrews.junit.ch03;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -115,5 +116,22 @@ public class TestDefaultController {
 		SampleHandler handler = new SampleHandler();
 		
 		controller.addHandler(request, handler);
+	}
+	
+	@Test(timeout=130) 
+	@Ignore(value="Ignore for now until we decide a decent time-limit")
+	public void testProcessMultipleRequestsTimeout() {
+		Request request;
+		Response response = new SampleResponse();
+		SampleHandler handler = new SampleHandler();
+ 		
+		for (int i=0; i<99999; i++) {
+			request = new SampleRequest(String.valueOf(i));
+			controller.addHandler(request, handler);
+			response = controller.processRequest(request);
+			assertNotNull(response);
+			assertNotSame(ErrorResponse.class, response.getClass());
+
+		}
 	}
 }
