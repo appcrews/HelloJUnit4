@@ -13,9 +13,20 @@ public class TestDefaultController {
 
 	private class SampleRequest implements Request {
 
+		private static final String DEFAULT_NAME = "Test";
+		private String name;
+		
+		public SampleRequest(String name) {
+			this.name = name;
+		}
+		
+		public SampleRequest() {
+			this(DEFAULT_NAME);
+		}
+
 		@Override
 		public String getName() {
-			return "Test";
+			return this.name;
 		}
 				
 	}
@@ -84,7 +95,7 @@ public class TestDefaultController {
 
 	@Test 
 	public void testProcessRequestAnswerErrorResponse() {
-		SampleRequest request = new SampleRequest();
+		SampleRequest request = new SampleRequest("testError");
 		SampleExceptionHandler handler = new SampleExceptionHandler();
 		controller.addHandler(request, handler);
 		Response response = controller.processRequest(request);
