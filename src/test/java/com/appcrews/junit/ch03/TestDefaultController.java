@@ -102,4 +102,18 @@ public class TestDefaultController {
 		assertNotNull("Must not return a null response", response);
 		assertEquals( ErrorResponse.class, response.getClass());
 	}
+	
+	@Test(expected=RuntimeException.class)
+	public void testGetHandlerNotDefined() {
+		SampleRequest request = new SampleRequest("testNotDefined");
+		controller.getHandler(request);
+	}
+	
+	@Test(expected=RuntimeException.class)
+	public void testAddRequestDuplicateName() {
+		SampleRequest request = new SampleRequest();
+		SampleHandler handler = new SampleHandler();
+		
+		controller.addHandler(request, handler);
+	}
 }
